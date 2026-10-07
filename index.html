@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magic Crystal Orb</title>
+    <title>ផ្ទះវីឡាពេលយប់ និងភ្លើងបំភ្លឺ</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: radial-gradient(circle at center, #1e1b4b, #09090b);
+            background: linear-gradient(to bottom, #090d16, #1e1b4b);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -23,98 +23,119 @@
             position: relative;
         }
 
-        /* ផ្ទៃខាងក្រោយមានផ្កាយតូចៗព្រិចៗ */
+        /* បរិយាកាសពេលយប់មានផ្កាយព្រិចៗ */
         body::before {
             content: '';
             position: absolute;
             width: 100%;
             height: 100%;
             background-image: radial-gradient(white 1px, transparent 0);
-            background-size: 40px 40px;
-            opacity: 0.15;
-            animation: moveStars 20s linear infinite;
+            background-size: 50px 50px;
+            opacity: 0.2;
+            animation: twinkle 4s ease-in-out infinite alternate;
         }
 
-        @keyframes moveStars {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(40px); }
+        @keyframes twinkle {
+            0% { opacity: 0.1; }
+            100% { opacity: 0.3; }
         }
 
-        .container {
+        .scene-container {
             text-align: center;
             z-index: 2;
         }
 
-        /* ប្រអប់គ្រាប់កែវវេទមន្ត */
-        .orb-wrapper {
+        /* រចនាសម្ព័ន្ធផ្ទះ */
+        .house-wrapper {
             position: relative;
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 2rem auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* រង្វង់ពន្លឺព័ទ្ធជុំវិញបែបអាគៀន */
-        .orb-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -15px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, #38bdf8, #818cf8, #c084fc, #f43f5e, #38bdf8);
-            animation: rotateGlow 3s linear infinite;
-            filter: blur(10px);
-            opacity: 0.7;
-        }
-
-        @keyframes rotateGlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* គ្រាប់កែវគ្រីស្តាល់ខាងក្នុង */
-        .crystal-orb {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(56, 189, 248, 0.2) 40%, rgba(15, 23, 42, 0.9) 80%);
-            border-radius: 50%;
-            position: relative;
-            box-shadow: inset 0 0 30px rgba(56, 189, 248, 0.6), 0 0 40px rgba(192, 132, 252, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 320px;
+            height: 260px;
+            margin: 0 auto 1.5rem auto;
             cursor: pointer;
-            transition: transform 0.3s ease;
         }
 
-        .crystal-orb:hover {
-            transform: scale(1.05);
+        /* ដំបូលផ្ទះ */
+        .roof {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 180px solid transparent;
+            border-right: 180px solid transparent;
+            border-bottom: 80px solid #334155;
+            transition: border-bottom-color 0.4s;
         }
 
-        /* ថាមពលស្នូលខាងក្នុង */
-        .core {
-            width: 60px;
+        /* ជញ្ជាំងផ្ទះ */
+        .walls {
+            position: absolute;
+            bottom: 0;
+            left: 30px;
+            width: 260px;
+            height: 180px;
+            background: #1e293b;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            transition: background 0.4s, box-shadow 0.4s;
+        }
+
+        /* ទ្វារផ្ទះ */
+        .door {
+            width: 50px;
+            height: 80px;
+            background: #0f172a;
+            border-radius: 4px 4px 0 0;
+            transition: background 0.4s, box-shadow 0.4s;
+        }
+
+        /* បង្អួចផ្ទះ (ឆ្វេង និងស្តាំ) */
+        .window {
+            position: absolute;
+            top: 40px;
+            width: 55px;
             height: 60px;
-            background: #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 20px #fff, 0 0 40px #38bdf8, 0 0 60px #c084fc;
-            animation: pulseCore 2s ease-in-out infinite alternate;
+            background: #0f172a;
+            border: 4px solid #475569;
+            border-radius: 6px;
+            transition: all 0.4s;
         }
 
-        @keyframes pulseCore {
-            0% { transform: scale(0.8); opacity: 0.6; filter: brightness(1); }
-            100% { transform: scale(1.2); opacity: 1; filter: brightness(1.5); }
+        .window.left { left: 30px; }
+        .window.right { right: 30px; }
+
+        /* ស្ថានភាពពេលបើកភ្លើងក្នុងផ្ទះ (ON) */
+        .house-wrapper.on .roof {
+            border-bottom-color: #475569;
+        }
+
+        .house-wrapper.on .walls {
+            background: #334155;
+            box-shadow: 0 0 50px rgba(250, 204, 21, 0.4), 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .house-wrapper.on .window {
+            background: #facc15;
+            border-color: #ca8a04;
+            box-shadow: 0 0 25px #facc15, inset 0 0 10px #fff;
+        }
+
+        .house-wrapper.on .door {
+            background: #eab308;
+            box-shadow: 0 0 15px #facc15;
         }
 
         /* អត្ថបទបង្ហាញ */
         .title {
             color: #f8fafc;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
         }
 
         .subtitle {
@@ -125,47 +146,54 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="orb-wrapper">
-            <div class="crystal-orb" id="magicOrb">
-                <div class="core"></div>
+    <div class="scene-container">
+        <!-- ផ្ទះវីឡា -->
+        <div class="house-wrapper" id="house">
+            <div class="roof"></div>
+            <div class="walls">
+                <div class="window left"></div>
+                <div class="door"></div>
+                <div class="window right"></div>
             </div>
         </div>
-        <div class="title">គ្រីស្តាល់វេទមន្តកាឡាក់ស៊ី</div>
-        <div class="subtitle" id="statusText">✨ សូមប៉ះលើគ្រាប់កែវដើម្បីដាស់ថាមពល!</div>
+
+        <div class="title">ផ្ទះវីឡាទំនើបពេលយប់</div>
+        <div class="subtitle" id="statusText">🏠 សូមចុចលើខ្នងផ្ទះដើម្បី បើក/បិទ ភ្លើងក្នុងផ្ទះ!</div>
     </div>
 
     <script>
-        const magicOrb = document.getElementById('magicOrb');
+        const house = document.getElementById('house');
         const statusText = document.getElementById('statusText');
 
-        const messages = [
-            "✨ ថាមពលពន្លឺផ្កាយត្រូវបានដាស់ឡើង!",
-            "🌌 ចក្រវាលកំពុងបញ្ចេញចរន្តអគ្គិសនី!",
-            "💫 ភាពស្រស់ស្អាតនិងសន្តិភាពក្នុងកាឡាក់ស៊ី!",
-            "🔮 ប៉ះម្តងទៀតដើម្បីប្តូរចរន្តថាមពល!"
-        ];
-
-        magicOrb.addEventListener('click', () => {
-            // បង្កើតសំឡេងរំភើបស្រាលៗពេលប៉ះ
+        // បង្កើតសំឡេងកុងតាក់ពេលចុច
+        function playSwitchSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
                 gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.2);
+                osc.stop(audioCtx.currentTime + 0.08);
             } catch (e) {}
+        }
 
-            // ប្តូរអត្ថបទចៃដន្យ
-            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-            statusText.innerHTML = randomMsg;
+        house.addEventListener('click', () => {
+            playSwitchSound();
+            house.classList.toggle('on');
+
+            if (house.classList.contains('on')) {
+                statusText.innerHTML = "✨ ភ្លើងក្នុងផ្ទះត្រូវបានបើក បំភ្លឺយ៉ាងស្រស់ស្អាត!";
+                statusText.style.color = "#facc15";
+            } else {
+                statusText.innerHTML = "🏠 សូមចុចលើខ្នងផ្ទះដើម្បី បើក/បិទ ភ្លើងក្នុងផ្ទះ!";
+                statusText.style.color = "#94a3b8";
+            }
         });
     </script>
 
