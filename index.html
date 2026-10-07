@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>កម្មវិធីកំណត់ម៉ោងសិក្សា (Study Focus Timer)</title>
+    <title>បណ្តុំរូបមន្ត គណិត រូប គីមី ថ្នាក់ទី១០</title>
     <style>
         * {
             margin: 0;
@@ -15,224 +15,223 @@
         body {
             background: linear-gradient(135deg, #0f172a, #1e1b4b);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
             color: #f8fafc;
+            padding: 20px;
         }
 
-        .study-container {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            text-align: center;
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         h1 {
+            text-align: center;
             font-size: 1.5rem;
-            margin-bottom: 1.5rem;
             color: #38bdf8;
+            margin-bottom: 1.5rem;
             text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
         }
 
-        /* ផ្នែកនាឡិកា (Timer) */
-        .timer-display {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin: 1rem 0;
-            color: #facc15;
-            text-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
-        }
-
-        .timer-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-start {
-            background-color: #22c55e;
-            color: white;
-        }
-        .btn-start:hover { background-color: #16a34a; }
-
-        .btn-pause {
-            background-color: #eab308;
-            color: white;
-        }
-        .btn-pause:hover { background-color: #ca8a04; }
-
-        .btn-reset {
-            background-color: #ef4444;
-            color: white;
-        }
-        .btn-reset:hover { background-color: #dc2626; }
-
-        /* ផ្នែកបញ្ជីកិច្ចការត្រូវធ្វើ (To-Do List) */
-        .task-section {
-            text-align: left;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-        }
-
-        .task-title {
-            font-size: 1rem;
-            margin-bottom: 10px;
-            color: #94a3b8;
-        }
-
-        .task-input-group {
+        /* ប៊ូតុងប្តូរមេរៀន (Tabs) */
+        .tab-buttons {
             display: flex;
             gap: 8px;
-            margin-bottom: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
+        .tab-btn {
+            background: #1e293b;
+            color: #94a3b8;
             border: 1px solid #475569;
-            background: #0f172a;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .btn-add {
-            background-color: #38bdf8;
-            color: #0f172a;
-        }
-        .btn-add:hover { background-color: #0ea5e9; }
-
-        ul.task-list {
-            list-style: none;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        ul.task-list li {
-            background: rgba(15, 23, 42, 0.6);
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ef4444;
+            padding: 10px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* ប្រអប់បង្ហាញមាតិកា */
+        .content-section {
+            display: none;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: #facc15;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        /* តារាងរូបមន្ត */
+        .formula-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+
+        .formula-table th, .formula-table td {
+            border: 1px solid #334155;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .formula-table th {
+            background-color: #1e293b;
+            color: #38bdf8;
+        }
+
+        .formula-table td {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .formula-highlight {
+            color: #f43f5e;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="study-container">
-        <h1>📚 កម្មវិធីកំណត់ម៉ោងសិក្សា</h1>
-        
-        <!-- Timer -->
-        <div class="timer-display" id="timer">25:00</div>
-        <div class="timer-buttons">
-            <button class="btn-start" id="startBtn">ចាប់ផ្តើម</button>
-            <button class="btn-pause" id="pauseBtn">ផ្អាក</button>
-            <button class="btn-reset" id="resetBtn">សារថ្មី</button>
+    <div class="container">
+        <h1>📚 បណ្តុំរូបមន្ត ថ្នាក់ទី១០</h1>
+
+        <!-- ប៊ូតុងរើសមុខវិជ្ជា -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="openTab(event, 'math')">📐 គណិតវិទ្យា</button>
+            <button class="tab-btn" onclick="openTab(event, 'physics')">⚡ រូបវិទ្យា</button>
+            <button class="tab-btn" onclick="openTab(event, 'chemistry')">🧪 គីមីវិទ្យា</button>
         </div>
 
-        <!-- Task List -->
-        <div class="task-section">
-            <div class="task-title">📝 កិច្ចការត្រូវធ្វើថ្ងៃនេះ៖</div>
-            <div class="task-input-group">
-                <input type="text" id="taskInput" placeholder="បញ្ចូលមេរៀន ឬកិច្ចការ...">
-                <button class="btn-add" id="addBtn">បន្ថែម</button>
-            </div>
-            <ul class="task-list" id="taskList"></ul>
+        <!-- ផ្នែកគណិតវិទ្យា -->
+        <div id="math" class="content-section active">
+            <h2>📐 រូបមន្តគណិតវិទ្យា (ពិជគណិត និងធរណីមាត្រ)</h2>
+            <table class="formula-table">
+                <tr>
+                    <th>មេរៀន / ប្រធានបទ</th>
+                    <th>រូបមន្តសំខាន់ៗ</th>
+                </tr>
+                <tr>
+                    <td>เอกសណ្ឋាន (Identities)</td>
+                    <td>
+                        $(a+b)^2 = a^2 + 2ab + b^2$<br>
+                        $(a-b)^2 = a^2 - 2ab + b^2$<br>
+                        $a^2 - b^2 = (a-b)(a+b)$
+                    </td>
+                </tr>
+                <tr>
+                    <td>សមីការដឺក្រទី២ ($ax^2+bx+c=0$)</td>
+                    <td>
+                        Discriminant: $\Delta = b^2 - 4ac$<br>
+                        គ្រឹះស៊េរី: $x = \frac{-b \pm \sqrt{\Delta}}{2a}$
+                    </td>
+                </tr>
+                <tr>
+                    <td>ក្រឡាផ្ទៃ និងមាឌ (Geometry)</td>
+                    <td>
+                        ផ្ទៃក្រឡារង្វង់: $S = \pi r^2$<br>
+                        បរិមាត្ររង្វង់: $P = 2\pi r$
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ផ្នែករូបវិទ្យា -->
+        <div id="physics" class="content-section">
+            <h2>⚡ រូបមន្តរូបវិទ្យា</h2>
+            <table class="formula-table">
+                <tr>
+                    <th>មេរៀន / ប្រធានបទ</th>
+                    <th>រូបមន្តសំខាន់ៗ</th>
+                </tr>
+                <tr>
+                    <td>ចលនានិងល្បឿន</td>
+                    <td>ល្បឿន: <span class="formula-highlight">$v = \frac{d}{t}$</span></td>
+                </tr>
+                <tr>
+                    <td>កម្លាំង និងម៉ាស</td>
+                    <td>កម្លាំង: <span class="formula-highlight">$F = m \cdot a$</span></td>
+                </tr>
+                <tr>
+                    <td>សម្ពាធ (Pressure)</td>
+                    <td>សម្ពាធ: <span class="formula-highlight">$P = \frac{F}{S}$</span></td>
+                </tr>
+                <tr>
+                    <td>ថាមពល (Energy)</td>
+                    <td>
+                        ថាមពល נេטיក: $E_k = \frac{1}{2}mv^2$<br>
+                        ថាមពលសក្តានុពល: $E_p = mgh$
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ផ្នែកគីមីវិទ្យា -->
+        <div id="chemistry" class="content-section">
+            <h2>🧪 រូបមន្តគីមីវិទ្យា</h2>
+            <table class="formula-table">
+                <tr>
+                    <th>មេរៀន / ប្រធានបទ</th>
+                    <th>រូបមន្តសំខាន់ៗ</th>
+                </tr>
+                <tr>
+                    <td>ចំនួនម៉ូល (Mole)</td>
+                    <td>ចំនួនម៉ូល: <span class="formula-highlight">$n = \frac{m}{M}$</span></td>
+                </tr>
+                <tr>
+                    <td>មាឌឧស្ម័ននៅ STP</td>
+                    <td>មាឌឧស្ម័ន: <span class="formula-highlight">$V = n \cdot 22.4$</span></td>
+                </tr>
+                <tr>
+                    <td>កំហាប់ម៉ូល (Molarity)</td>
+                    <td>កំហាប់: <span class="formula-highlight">$C = \frac{n}{V}$</span></td>
+                </tr>
+                <tr>
+                    <td>កំហាប់ភាគរយ</td>
+                    <td>ភាគរយ: <span class="formula-highlight">$P\% = \frac{m_{solute}}{m_{sol}} \times 100\%$</span></td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <script>
-        // កូដគ្រប់គ្រងម៉ោង (Timer Logic)
-        let timeLeft = 1500; // 25 នាទី
-        let timerId = null;
-        const timerDisplay = document.getElementById('timer');
-        const startBtn = document.getElementById('startBtn');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const resetBtn = document.getElementById('resetBtn');
+        function openTab(evt, tabName) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(sec => sec.classList.remove('active'));
 
-        function updateTimer() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
-
-        startBtn.addEventListener('click', () => {
-            if (timerId !== null) return;
-            timerId = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimer();
-                } else {
-                    clearInterval(timerId);
-                    timerId = null;
-                    alert("🎉 អបអរសាទរ! หมดពេលសិក្សាហើយ សម្រាកបន្តិចសិន!");
-                }
-            }, 1000);
-        });
-
-        pauseBtn.addEventListener('click', () => {
-            clearInterval(timerId);
-            timerId = null;
-        });
-
-        resetBtn.addEventListener('click', () => {
-            clearInterval(timerId);
-            timerId = null;
-            timeLeft = 1500;
-            updateTimer();
-        });
-
-        // កូដគ្រប់គ្រងបញ្ជីកិច្ចការ (To-Do List Logic)
-        const taskInput = document.getElementById('taskInput');
-        const addBtn = document.getElementById('addBtn');
-        const taskList = document.getElementById('taskList');
-
-        addBtn.addEventListener('click', () => {
-            const taskText = taskInput.value.trim();
-            if (taskText === "") return;
-
-            const li = document.createElement('li');
-            li.innerHTML = `<span>${taskText}</span> <button class="delete-btn">&times;</button>`;
-            
-            li.querySelector('.delete-btn').addEventListener('click', () => {
-                li.remove();
-            });
-
-            taskList.appendChild(li);
-            taskInput.value = "";
-        });
-
-        updateTimer();
     </script>
 
 </body>
