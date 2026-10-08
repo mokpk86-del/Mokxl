@@ -3,99 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Digital Rain - កូដកាឡាក់ស៊ីឌីជីថល</title>
+    <title>Ultimate Cyberpunk HUD - Mokxl Base</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Khmer OS Battambang', 'Courier New', Courier, monospace;
         }
 
         body {
-            background-color: #000;
-            overflow: hidden;
+            background-color: #030712;
             height: 100vh;
-            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #38bdf8;
         }
 
+        /* ផ្ទៃខាងក្រោយ Matrix Canvas */
         canvas {
-            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
 
-        .overlay-text {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #00ff66;
-            font-family: 'Khmer OS Battambang', sans-serif;
-            font-size: 1.2rem;
+        /* ប្រអប់ផ្ទាំងគ្រប់គ្រងកណ្តាល (Hologram Panel) */
+        .hud-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(15, 23, 42, 0.85);
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.4), inset 0 0 25px rgba(56, 189, 248, 0.2);
+            padding: 35px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
             text-align: center;
-            text-shadow: 0 0 10px #00ff66;
-            z-index: 10;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 20px;
-            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            animation: floatCard 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* ចំណងជើងមានពន្លឺ Neon */
+        h1 {
+            font-size: 1.4rem;
+            color: #f8fafc;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px #38bdf8, 0 0 30px #38bdf8;
+            letter-spacing: 1px;
+        }
+
+        /* របារបង្ហាញកូដទិន្នន័យ */
+        .terminal-screen {
+            background: rgba(3, 7, 18, 0.7);
             border: 1px solid #00ff66;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            height: 110px;
+            overflow-y: auto;
+            text-align: left;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        /* ប៊ូតុងបញ្ជាអស្ចារ្យ */
+        .action-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn-neon {
+            background: transparent;
+            color: #38bdf8;
+            border: 2px solid #38bdf8;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .btn-neon:hover {
+            background: #38bdf8;
+            color: #030712;
+            box-shadow: 0 0 25px #38bdf8, 0 0 50px #38bdf8;
+            transform: scale(1.05);
+        }
+
+        .btn-neon.danger {
+            color: #f43f5e;
+            border-color: #f43f5e;
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.2);
+        }
+
+        .btn-neon.danger:hover {
+            background: #f43f5e;
+            color: #030712;
+            box-shadow: 0 0 25px #f43f5e, 0 0 50px #f43f5e;
+        }
+
+        /* រង្វង់សញ្ញាបង្ហាញសកម្មភាព Live */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff66;
+            margin-right: 6px;
+            animation: blinkStatus 1s infinite alternate;
+        }
+
+        @keyframes blinkStatus {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="overlay-text">⚡ ប្រព័ន្ធកាឡាក់ស៊ីឌីជីថល កំពុងដំណើរការ...</div>
+    <!-- ផ្ទៃខាងក្រោយ Matrix Canvas -->
     <canvas id="matrixCanvas"></canvas>
 
+    <!-- ផ្ទាំង HUD កណ្តាល -->
+    <div class="hud-container">
+        <h1>🌐 MOKXL CYBER SYSTEM</h1>
+        
+        <div class="terminal-screen" id="terminal">
+            > SYSTEM BOOT: Initialized securely...<br>
+            > GitHub Pages Pipeline: ONLINE [OK]<br>
+            > Quantum Core & Matrix Engine: ACTIVE<br>
+            > Ready for user interaction...
+        </div>
+
+        <div class="action-group">
+            <button class="btn-neon" id="activateBtn">🚀 ដាស់ថាមពល</button>
+            <button class="btn-neon danger" id="resetBtn">🔄 កំណត់ឡើងវិញ</button>
+        </div>
+
+        <div class="status-text">
+            <span class="status-indicator"></span>ប្រព័ន្ធកំពុងដំណើរការដោយសុវត្ថិភាព
+        </div>
+    </div>
+
     <script>
+        // កូដចលនា Matrix Rain ខាងក្រោយ
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
 
-        // កំណត់ទំហំ Canvas ឱ្យពេញអេក្រង់
         canvas.height = window.innerHeight;
         canvas.width = window.innerWidth;
 
-        // តួអក្សរ និងលេខកូដសម្រាប់ទម្លាក់ចុះក្រោម
-        const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*()_+-=[]{}|;:,.<>/?MOKXL";
-        const fontSize = 16;
+        const chars = "0123456789ABCDEFHIJKLMNOPQRSTUVWXYZ@#$%^&*()_+-=[]{}|;:,.<>/?MOKXL";
+        const fontSize = 14;
         const columns = canvas.width / fontSize;
-
-        // បង្កើតតារាងទីតាំងជួរឈរ
         const drops = [];
+
         for (let i = 0; i < columns; i++) {
             drops[i] = 1;
         }
 
         function drawMatrix() {
-            // បង្កើតបែបផែនម្លប់រសាត់ (Trailing effect)
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillStyle = 'rgba(3, 7, 18, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#00ff66'; // ពណ៌ខៀវខ្ចី/បៃតងបែបឌីជីថល
+            ctx.fillStyle = '#00ff66';
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < drops.length; i++) {
-                // ជ្រើសរើសតួអក្សរចៃដន្យ
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                
-                // គូរអក្សរចុះក្រោម
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-                // បញ្ជូនជួរឈរត្រឡប់ឡើងលើវិញពេលធ្លាក់ដល់បាត
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
-
                 drops[i]++;
             }
         }
 
-        // ល្បឿនចលនាធ្លាក់
-        setInterval(drawMatrix, 30);
+        setInterval(drawMatrix, 25);
 
-        // កែតម្រូវទំហំអេក្រង់อัตโนมัติពេលបង្វិលទូរស័ព្ទ
         window.addEventListener('resize', () => {
             canvas.height = window.innerHeight;
             canvas.width = window.innerWidth;
+        });
+
+        // ប្រព័ន្ធសំឡេងបែប Sci-Fi ពេលចុចប៊ូតុង
+        function playBeep(freq, type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {}
+        }
+
+        // អន្តរកម្មប៊ូតុង
+        const activateBtn = document.getElementById('activateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const terminal = document.getElementById('terminal');
+
+        activateBtn.addEventListener('click', () => {
+            playBeep(600, 'sine');
+            terminal.innerHTML += "<br>> [SUCCESS] Quantum Boost Activated! ថាមពលកាឡាក់ស៊ីកម្រិតខ្ពស់កំពុងបញ្ចេញ។";
+            terminal.scrollTop = terminal.scrollHeight;
+        });
+
+        resetBtn.addEventListener('click', () => {
+            playBeep(250, 'sawtooth');
+            terminal.innerHTML = "> SYSTEM RESET: Core protocols re-calibrated successfully.";
+            terminal.scrollTop = terminal.scrollHeight;
         });
     </script>
 
