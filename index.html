@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>បណ្តុំរូបមន្ត គណិត រូប គីមី ថ្នាក់ទី១០</title>
+    <title>តារាងមេលេខគុណ (ពីមេ ២ ដល់មេ ១០)</title>
     <style>
         * {
             margin: 0;
@@ -20,100 +20,61 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: #38bdf8;
             margin-bottom: 1.5rem;
             text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
         }
 
-        /* ប៊ូតុងប្តូរមេរៀន (Tabs) */
-        .tab-buttons {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        /* ប្រអប់បង្ហាញមេលេខនីមួយៗ */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
-        .tab-btn {
-            background: #1e293b;
-            color: #94a3b8;
-            border: 1px solid #475569;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active {
-            background: #38bdf8;
-            color: #0f172a;
-            border-color: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        }
-
-        /* ប្រអប់បង្ហាញមាតិកា */
-        .content-section {
-            display: none;
-            background: rgba(30, 41, 59, 0.7);
+        .table-box {
+            background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
         }
 
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .table-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);
         }
 
         h2 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #facc15;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 8px;
         }
 
-        /* តារាងរូបមន្ត */
-        .formula-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-        }
-
-        .formula-table th, .formula-table td {
-            border: 1px solid #334155;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .formula-table th {
-            background-color: #1e293b;
-            color: #38bdf8;
-        }
-
-        .formula-table td {
+        .math-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            margin-bottom: 4px;
             background: rgba(15, 23, 42, 0.5);
+            border-radius: 6px;
+            font-size: 0.95rem;
         }
 
-        .formula-highlight {
-            color: #f43f5e;
+        .math-row span:last-child {
+            color: #38bdf8;
             font-weight: bold;
         }
     </style>
@@ -121,116 +82,34 @@
 <body>
 
     <div class="container">
-        <h1>📚 បណ្តុំរូបមន្ត ថ្នាក់ទី១០</h1>
+        <h1>🔢 តារាងមេលេខគុណ (ពីមេ ២ ដល់មេ ១០)</h1>
 
-        <!-- ប៊ូតុងរើសមុខវិជ្ជា -->
-        <div class="tab-buttons">
-            <button class="tab-btn active" onclick="openTab(event, 'math')">📐 គណិតវិទ្យា</button>
-            <button class="tab-btn" onclick="openTab(event, 'physics')">⚡ រូបវិទ្យា</button>
-            <button class="tab-btn" onclick="openTab(event, 'chemistry')">🧪 គីមីវិទ្យា</button>
-        </div>
-
-        <!-- ផ្នែកគណិតវិទ្យា -->
-        <div id="math" class="content-section active">
-            <h2>📐 រូបមន្តគណិតវិទ្យា (ពិជគណិត និងធរណីមាត្រ)</h2>
-            <table class="formula-table">
-                <tr>
-                    <th>មេរៀន / ប្រធានបទ</th>
-                    <th>រូបមន្តសំខាន់ៗ</th>
-                </tr>
-                <tr>
-                    <td>เอกសណ្ឋាន (Identities)</td>
-                    <td>
-                        $(a+b)^2 = a^2 + 2ab + b^2$<br>
-                        $(a-b)^2 = a^2 - 2ab + b^2$<br>
-                        $a^2 - b^2 = (a-b)(a+b)$
-                    </td>
-                </tr>
-                <tr>
-                    <td>សមីការដឺក្រទី២ ($ax^2+bx+c=0$)</td>
-                    <td>
-                        Discriminant: $\Delta = b^2 - 4ac$<br>
-                        គ្រឹះស៊េរី: $x = \frac{-b \pm \sqrt{\Delta}}{2a}$
-                    </td>
-                </tr>
-                <tr>
-                    <td>ក្រឡាផ្ទៃ និងមាឌ (Geometry)</td>
-                    <td>
-                        ផ្ទៃក្រឡារង្វង់: $S = \pi r^2$<br>
-                        បរិមាត្ររង្វង់: $P = 2\pi r$
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- ផ្នែករូបវិទ្យា -->
-        <div id="physics" class="content-section">
-            <h2>⚡ រូបមន្តរូបវិទ្យា</h2>
-            <table class="formula-table">
-                <tr>
-                    <th>មេរៀន / ប្រធានបទ</th>
-                    <th>រូបមន្តសំខាន់ៗ</th>
-                </tr>
-                <tr>
-                    <td>ចលនានិងល្បឿន</td>
-                    <td>ល្បឿន: <span class="formula-highlight">$v = \frac{d}{t}$</span></td>
-                </tr>
-                <tr>
-                    <td>កម្លាំង និងម៉ាស</td>
-                    <td>កម្លាំង: <span class="formula-highlight">$F = m \cdot a$</span></td>
-                </tr>
-                <tr>
-                    <td>សម្ពាធ (Pressure)</td>
-                    <td>សម្ពាធ: <span class="formula-highlight">$P = \frac{F}{S}$</span></td>
-                </tr>
-                <tr>
-                    <td>ថាមពល (Energy)</td>
-                    <td>
-                        ថាមពល נេטיក: $E_k = \frac{1}{2}mv^2$<br>
-                        ថាមពលសក្តានុពល: $E_p = mgh$
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- ផ្នែកគីមីវិទ្យា -->
-        <div id="chemistry" class="content-section">
-            <h2>🧪 រូបមន្តគីមីវិទ្យា</h2>
-            <table class="formula-table">
-                <tr>
-                    <th>មេរៀន / ប្រធានបទ</th>
-                    <th>រូបមន្តសំខាន់ៗ</th>
-                </tr>
-                <tr>
-                    <td>ចំនួនម៉ូល (Mole)</td>
-                    <td>ចំនួនម៉ូល: <span class="formula-highlight">$n = \frac{m}{M}$</span></td>
-                </tr>
-                <tr>
-                    <td>មាឌឧស្ម័ននៅ STP</td>
-                    <td>មាឌឧស្ម័ន: <span class="formula-highlight">$V = n \cdot 22.4$</span></td>
-                </tr>
-                <tr>
-                    <td>កំហាប់ម៉ូល (Molarity)</td>
-                    <td>កំហាប់: <span class="formula-highlight">$C = \frac{n}{V}$</span></td>
-                </tr>
-                <tr>
-                    <td>កំហាប់ភាគរយ</td>
-                    <td>ភាគរយ: <span class="formula-highlight">$P\% = \frac{m_{solute}}{m_{sol}} \times 100\%$</span></td>
-                </tr>
-            </table>
+        <div class="grid-container" id="multiplicationTables">
+            <!-- មេលេខនឹងត្រូវបង្កើតដោយស្វ័យប្រវត្តិតាម JavaScript -->
         </div>
     </div>
 
     <script>
-        function openTab(evt, tabName) {
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(sec => sec.classList.remove('active'));
+        const container = document.getElementById('multiplicationTables');
 
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
+        // រង្វិលជុំបង្កើតមេលេខពី ២ ដល់ ១០
+        for (let i = 2; i <= 10; i++) {
+            let box = document.createElement('div');
+            box.className = 'table-box';
+            
+            let htmlContent = `<h2>មេលេខ ${i}</h2>`;
+            
+            for (let j = 1; j <= 10; j++) {
+                htmlContent += `
+                    <div class="math-row">
+                        <span>${i} × ${j} =</span>
+                        <span>${i * j}</span>
+                    </div>
+                `;
+            }
+            
+            box.innerHTML = htmlContent;
+            container.appendChild(box);
         }
     </script>
 
