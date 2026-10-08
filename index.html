@@ -3,114 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>តារាងមេលេខគុណ (ពីមេ ២ ដល់មេ ១០)</title>
+    <title>Matrix Digital Rain - កូដកាឡាក់ស៊ីឌីជីថល</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Khmer OS Battambang', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a, #1e1b4b);
-            min-height: 100vh;
-            color: #f8fafc;
-            padding: 20px;
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+        canvas {
+            display: block;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 1.6rem;
-            color: #38bdf8;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-        }
-
-        /* ប្រអប់បង្ហាញមេលេខនីមួយៗ */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .table-box {
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease;
-        }
-
-        .table-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);
-        }
-
-        h2 {
+        .overlay-text {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ff66;
+            font-family: 'Khmer OS Battambang', sans-serif;
             font-size: 1.2rem;
-            color: #facc15;
-            margin-bottom: 12px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
-        }
-
-        .math-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 10px;
-            margin-bottom: 4px;
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-
-        .math-row span:last-child {
-            color: #38bdf8;
-            font-weight: bold;
+            text-shadow: 0 0 10px #00ff66;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #00ff66;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🔢 តារាងមេលេខគុណ (ពីមេ ២ ដល់មេ ១០)</h1>
-
-        <div class="grid-container" id="multiplicationTables">
-            <!-- មេលេខនឹងត្រូវបង្កើតដោយស្វ័យប្រវត្តិតាម JavaScript -->
-        </div>
-    </div>
+    <div class="overlay-text">⚡ ប្រព័ន្ធកាឡាក់ស៊ីឌីជីថល កំពុងដំណើរការ...</div>
+    <canvas id="matrixCanvas"></canvas>
 
     <script>
-        const container = document.getElementById('multiplicationTables');
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // រង្វិលជុំបង្កើតមេលេខពី ២ ដល់ ១០
-        for (let i = 2; i <= 10; i++) {
-            let box = document.createElement('div');
-            box.className = 'table-box';
-            
-            let htmlContent = `<h2>មេលេខ ${i}</h2>`;
-            
-            for (let j = 1; j <= 10; j++) {
-                htmlContent += `
-                    <div class="math-row">
-                        <span>${i} × ${j} =</span>
-                        <span>${i * j}</span>
-                    </div>
-                `;
-            }
-            
-            box.innerHTML = htmlContent;
-            container.appendChild(box);
+        // កំណត់ទំហំ Canvas ឱ្យពេញអេក្រង់
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        // តួអក្សរ និងលេខកូដសម្រាប់ទម្លាក់ចុះក្រោម
+        const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*()_+-=[]{}|;:,.<>/?MOKXL";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        // បង្កើតតារាងទីតាំងជួរឈរ
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
         }
+
+        function drawMatrix() {
+            // បង្កើតបែបផែនម្លប់រសាត់ (Trailing effect)
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff66'; // ពណ៌ខៀវខ្ចី/បៃតងបែបឌីជីថល
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                // ជ្រើសរើសតួអក្សរចៃដន្យ
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                
+                // គូរអក្សរចុះក្រោម
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // បញ្ជូនជួរឈរត្រឡប់ឡើងលើវិញពេលធ្លាក់ដល់បាត
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        // ល្បឿនចលនាធ្លាក់
+        setInterval(drawMatrix, 30);
+
+        // កែតម្រូវទំហំអេក្រង់อัตโนมัติពេលបង្វិលទូរស័ព្ទ
+        window.addEventListener('resize', () => {
+            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+        });
     </script>
 
 </body>
